@@ -56,7 +56,6 @@ app.get('/repositories', function (req, res, next) {
 
 app.post('/user/feed', function (req, res, next) {
   let id = req.body.id;
-  console.log(req.body);
   client.lrange(id, 0, -1, (error, data) => {
     if (error) {
       console.log(error);
@@ -81,7 +80,7 @@ app.post('/repositories', function (req, res, next) {
   const repository = getRepositoryByID(repositoryId);
   const newFeed = `${action} on ${repository.name}`;
   repository.followers.forEach((follower) => {
-    client.rpush(follower, newFeed);
+    client.rpush(follower.feedId, newFeed);
   });
   res.render('repositories', {
     message: newFeed,

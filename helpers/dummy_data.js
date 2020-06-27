@@ -24,9 +24,22 @@ exports.allUsers = [
 const firstRepository = new repositoryClass(
   1,
   'Base de datos no relacionales',
-  [firstUser.feedId, secondUser.feedId]
+  firstUser,
+  [secondUser, thirdUser],
+  [fourthUser]
 );
-const secondRepository = new repositoryClass(2, 'Desarrollo de UI', [
-  thirdUser.feedId
-]);
-exports.allRepositories = [firstRepository, secondRepository];
+const secondRepository = new repositoryClass(
+  2,
+  'Desarrollo de UI',
+  fifthUser,
+  [sixthUser],
+  [seventhUser]
+);
+const thirdRepository = new repositoryClass(
+  3,
+  'Arquitectura de software',
+  eighthUser,
+  [firstUser, fourthUser],
+  [sixthUser, seventhUser]
+);
+exports.allRepositories = [firstRepository, secondRepository, thirdRepository];

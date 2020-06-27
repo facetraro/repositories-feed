@@ -4,4 +4,7 @@ class User {
     this.name = name;
   }
 }
+User.prototype.toString = function perroToString() {
+  return this.name;
+}
 module.exports = User;
