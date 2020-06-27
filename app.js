@@ -56,7 +56,7 @@ app.get('/repositories', function (req, res, next) {
 
 app.post('/user/feed', function (req, res, next) {
   let id = req.body.id;
-  client.lrange(id, 0, -1, (error, data) => {
+  client.zrevrange(id, 0, -1, (error, data) => {
     if (error) {
       console.log(error);
     }
@@ -78,10 +78,12 @@ app.post('/repositories', function (req, res, next) {
   const repositoryId = req.body.repositoryId;
   const action = req.body.action;
   const repository = getRepositoryByID(repositoryId);
-  const newFeed = `${action} on ${repository.name}`;
+  const stringDate = new Date().toString();
+  const newFeed = `${action} on ${repository.name} [${stringDate}]`;
   const interestedUsers = repository.getInterestedUsers();
   interestedUsers.forEach((interested) => {
-    client.rpush(interested.feedId, newFeed);
+    client.zadd(interested.feedId, interested.feedSize + 1, newFeed);
+    interested.feedSize++;
   });
   res.render('repositories', {
     message: newFeed,
