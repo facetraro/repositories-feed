@@ -44,7 +44,7 @@ app.use(methodOverride('_method'));
 
 app.get('/', function (req, res, next) {
   res.render('feed', {
-    users: allUsers,
+    users: allUsers
   });
 });
 
@@ -63,12 +63,12 @@ app.post('/user/feed', function (req, res, next) {
     if (!data) {
       res.render('feed', {
         error: 'Feed is empty!',
-        users: allUsers,
+        users: allUsers
       });
     } else {
       res.render('feed', {
         feed: data,
-        users: allUsers,
+        users: allUsers
       });
     }
   });
@@ -79,8 +79,9 @@ app.post('/repositories', function (req, res, next) {
   const action = req.body.action;
   const repository = getRepositoryByID(repositoryId);
   const newFeed = `${action} on ${repository.name}`;
-  repository.followers.forEach((follower) => {
-    client.rpush(follower.feedId, newFeed);
+  const interestedUsers = repository.getInterestedUsers();
+  interestedUsers.forEach((interested) => {
+    client.rpush(interested.feedId, newFeed);
   });
   res.render('repositories', {
     message: newFeed,
