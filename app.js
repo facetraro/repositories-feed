@@ -19,6 +19,15 @@ function getRepositoryByID(id) {
   });
   return ret;
 }
+function getUserByID(id) {
+  let ret = null;
+  allUsers.forEach((user) => {
+    if (user.feedId == id) {
+      ret = user;
+    }
+  });
+  return ret;
+}
 
 let client = redis.createClient();
 try {
@@ -56,17 +65,19 @@ app.get('/repositories', function (req, res, next) {
 
 app.post('/user/feed', function (req, res, next) {
   let id = req.body.id;
+  const user = getUserByID(id);
   client.zrevrange(id, 0, -1, (error, data) => {
     if (error) {
       console.log(error);
     }
-    if (!data) {
+    if (!data || data.length == 0) {
       res.render('feed', {
-        error: 'Feed is empty!',
+        error: `Feed of ${user} is empty!`,
         users: allUsers
       });
     } else {
       res.render('feed', {
+        user: user,
         feed: data,
         users: allUsers
       });

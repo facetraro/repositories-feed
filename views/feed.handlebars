@@ -2,13 +2,18 @@
 {{#if error}}
   <span>{{error}}</span>
 {{else}}
-  <ul class="list-group">
+  {{#if user}}
+    <h5>Feed of {{user}}</h5>
+    <ul class="list-group">
     {{#each feed}}
-    <li class="list-group-item">{{this}}</li>
+      <li class="list-group-item">{{this}}</li>
     {{/each}}
-  </ul>
+    </ul>
+  {{else}}
+    <span>Not selected feed.</span>
+  {{/if}}
 {{/if}}
-<span>Select user:</span>
+<h5>Select user:</h5>
 <form class="form-inline" method="POST" action="/user/feed">
   <div class="form-group">
     <select class="form-control" id="id" name="id">
