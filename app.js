@@ -5,23 +5,10 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const redis = require('redis');
 
-const userClass = require('./domain/user');
-const repositoryClass = require('./domain/repository');
+const dummyData = require('./helpers/dummy_data');
 
-const firstUser = new userClass(1, 'Andres');
-const secondUser = new userClass(2, 'Federico');
-const thirdUser = new userClass(3, 'Marcelo');
-const allUsers = [firstUser, secondUser, thirdUser];
-
-const firstRepository = new repositoryClass(
-  1,
-  'Base de datos no relacionales',
-  [firstUser.feedId, secondUser.feedId]
-);
-const secondRepository = new repositoryClass(2, 'Desarrollo de UI', [
-  thirdUser.feedId
-]);
-const allRepositories = [firstRepository, secondRepository];
+const allUsers = dummyData.allUsers;
+const allRepositories = dummyData.allRepositories;
 
 function getRepositoryByID(id) {
   let ret = null;
@@ -56,7 +43,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 
 app.get('/', function (req, res, next) {
-  res.render('feed');
+  res.render('feed', {
+    users: allUsers,
+  });
 });
 
 app.get('/repositories', function (req, res, next) {
@@ -67,17 +56,20 @@ app.get('/repositories', function (req, res, next) {
 
 app.post('/user/feed', function (req, res, next) {
   let id = req.body.id;
+  console.log(req.body);
   client.lrange(id, 0, -1, (error, data) => {
     if (error) {
       console.log(error);
     }
     if (!data) {
       res.render('feed', {
-        error: 'Feed is empty!'
+        error: 'Feed is empty!',
+        users: allUsers,
       });
     } else {
       res.render('feed', {
-        feed: data
+        feed: data,
+        users: allUsers,
       });
     }
   });

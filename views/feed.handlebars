@@ -8,12 +8,13 @@
     {{/each}}
   </ul>
 {{/if}}
+<span>Select user:</span>
 <form class="form-inline" method="POST" action="/user/feed">
   <div class="form-group">
     <select class="form-control" id="id" name="id">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
+      {{#each users}}
+        <option value="{{this.feedId}}">[{{this.feedId}}] {{this.name}}</option>
+      {{/each}}
     </select>
   </div>
   <input type="submit" class="btn btn-primary" value="View">
