@@ -1,0 +1,26 @@
+<h1>Feed</h1>
+{{#if error}}
+  <span>{{error}}</span>
+{{else}}
+  {{#if user}}
+    <h5>Feed of {{user}}</h5>
+    <ul class="list-group">
+    {{#each feed}}
+      <li class="list-group-item">{{this}}</li>
+    {{/each}}
+    </ul>
+  {{else}}
+    <span>Not selected feed.</span>
+  {{/if}}
+{{/if}}
+<h5>Select user:</h5>
+<form class="form-inline" method="POST" action="/user/feed">
+  <div class="form-group">
+    <select class="form-control" id="id" name="id">
+      {{#each users}}
+        <option value="{{this.feedId}}">{{this}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <input type="submit" class="btn btn-primary" value="View">
+</form>

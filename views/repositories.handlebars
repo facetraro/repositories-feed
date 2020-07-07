@@ -1,0 +1,46 @@
+<h1>Repositories</h1>
+{{#if message}}
+  <span>{{message}}</span>
+{{/if}}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Owner</th>
+      <th scope="col">Followers</th>
+      <th scope="col">Favorites</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each repositories}}
+    <tr>
+      <th scope="row">{{this.id}}</th>
+      <td>{{this.name}}</td>
+      <td>{{this.owner.name}}</td>
+      <td>
+        {{this.followers}}
+      </td>
+      <td>
+         {{this.favorites}}
+      </td>
+      <td>
+        <form class="form-inline" method="POST" action="/repositories">
+          <div class="form-group">
+            <input type="hidden" id="repositoryId" name="repositoryId" value={{this.id}}>
+            <select class="form-control" id="action" name="action">
+              <option>New Commit</option>
+              <option>New Issue</option>
+              <option>New Pull Request</option>
+              <option>New Version</option>
+              <option>New Gist</option>
+            </select>
+          </div>
+          <input type="submit" class="btn btn-primary" value="Do">
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
